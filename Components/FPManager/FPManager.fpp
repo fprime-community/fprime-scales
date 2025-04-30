@@ -1,6 +1,6 @@
 module Components {
-    @ handles machine learning oepartions by configuring model parameters, facilitating selection from the model library, executing specified models, and monitoring operational progress throughout the model lifecyle
-    active component MLManager {
+    @ monitors system error states, processes error information, and communicates with the system management infrastructure to support error handling
+    active component FPManager {
 
         # One async command/port is required for active components
         # This should be overridden by the developers with a useful command/port

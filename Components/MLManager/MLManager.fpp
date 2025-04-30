@@ -1,6 +1,6 @@
 module components {
-    @ controls spacecraft operational state transitions and resource allocation based on system monitoring data
-    active component SpacecraftStateManager {
+    @ handles machine learning oepartions by configuring model parameters, facilitating selection from the model library, executing specified models, and monitoring operational progress throughout the model lifecyle
+    active component MLManager {
 
         # One async command/port is required for active components
         # This should be overridden by the developers with a useful command/port

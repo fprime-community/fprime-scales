@@ -1,4 +1,4 @@
-module Components {
+module components {
 
   # Defining types needed for this component
   enum SystemState: U8 {
@@ -41,9 +41,9 @@ module Components {
   @ Component to manage and monitor power and thermal conditions of the spacecraft
   active component PowerThermalManager {
     
-    # ----------------------------------------------------------------------
-    # General ports
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 General Ports                               #
+    ###############################################################################
     
     @ Array of ports for receiving power data from multiple sensors
     async input port powerData: [5] components.PowerReading
@@ -60,9 +60,9 @@ module Components {
     @ Output port for sending power/thermal status to SystemResources component
     output port systemResourcesOut: components.PowerThermalStatus
     
-    # ----------------------------------------------------------------------
-    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
+    ###############################################################################
     @ Port for requesting the current time
     time get port timeCaller
     
@@ -90,9 +90,9 @@ module Components {
     @ Port to set the value of a parameter
     param set port prmSetOut
     
-    # ----------------------------------------------------------------------
-    # Commands
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                  Commands                                   #
+    ###############################################################################
     
     @ Command to force a full power/thermal status update
     async command UPDATE_STATUS
@@ -119,9 +119,9 @@ module Components {
       enable: bool @< Whether to enable autonomous correction
     )
     
-    # ----------------------------------------------------------------------
-    # Events
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                   Events                                    #
+    ###############################################################################
     
     @ Event indicating thermal warning threshold exceeded
     event THERMAL_WARNING(
@@ -179,9 +179,9 @@ module Components {
       severity: string size 8 @< Severity of the issue (LOW, MEDIUM, HIGH)
     ) severity activity high id 7 format "{} issue ({}) corrected: {}"
     
-    # ----------------------------------------------------------------------
-    # Telemetry
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 Telemetry                                   #
+    ###############################################################################
     
     @ Maximum temperature currently detected
     telemetry MaxTemperature: F32

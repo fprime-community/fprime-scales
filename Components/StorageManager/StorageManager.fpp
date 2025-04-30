@@ -1,4 +1,4 @@
-module Components {
+module components {
 
   # Defining types needed for this component
   
@@ -55,9 +55,9 @@ module Components {
   @ Component to manage and monitor system storage resources
   active component StorageManager {
     
-    # ----------------------------------------------------------------------
-    # General ports
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 General Ports                               #
+    ###############################################################################
     
     @ Array of input ports for receiving data from multiple components
     async input port dataInput: [10] components.StorageData
@@ -71,9 +71,9 @@ module Components {
     @ Array of output ports for sending data to multiple components
     output port dataOutput: [10] components.StorageData
     
-    # ----------------------------------------------------------------------
-    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
+    ###############################################################################
     @ Port for requesting the current time
     time get port timeCaller
     
@@ -101,9 +101,9 @@ module Components {
     @ Port to set the value of a parameter
     param set port prmSetOut
     
-    # ----------------------------------------------------------------------
-    # Commands
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                  Commands                                   #
+    ###############################################################################
     
     @ Command to store data from a specific component
     async command STORE_DATA(
@@ -156,9 +156,9 @@ module Components {
       componentId: U8 @< Component ID to get stats for
     )
     
-    # ----------------------------------------------------------------------
-    # Events
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                   Events                                    #
+    ###############################################################################
     
     @ Event indicating data successfully stored
     event DATA_STORED(
@@ -221,9 +221,9 @@ module Components {
       severity: string size 16 @< Severity of issue
     ) severity warning high id 8 format "Storage health issue detected: {} ({})"
     
-    # ----------------------------------------------------------------------
-    # Telemetry
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 Telemetry                                   #
+    ###############################################################################
     
     @ Total storage capacity in MB
     telemetry TotalStorageCapacity: U32

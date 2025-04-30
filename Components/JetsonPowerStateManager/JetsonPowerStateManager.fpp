@@ -1,4 +1,4 @@
-module Components {
+module components {
   # Defining types needed for this component
   enum PowerLevel: U8 {
     WATTS_15 = 0 @< 15 Watts power state
@@ -17,9 +17,9 @@ module Components {
   active component JetsonPowerStateManager {
     # One async command/port is required for active components
     
-    # ----------------------------------------------------------------------
-    # General ports
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 General Ports                               #
+    ###############################################################################
     
     @ Port for receiving ping requests to check if Jetson is awake
     async input port pingReceive: Svc.Ping
@@ -33,9 +33,9 @@ module Components {
     @ Port for sending current power state information
     output port powerStateSend: components.PowerState
     
-    # ----------------------------------------------------------------------
-    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
+    ###############################################################################
     @ Port for requesting the current time
     time get port timeCaller
     
@@ -63,9 +63,9 @@ module Components {
     @Port to set the value of a parameter
     param set port prmSetOut
     
-    # ----------------------------------------------------------------------
-    # Commands
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                  Commands                                   #
+    ###############################################################################
     
     @ Command to set the Jetson power state
     async command SET_POWER_STATE(
@@ -78,9 +78,9 @@ module Components {
     @ Command to check if Jetson is awake
     async command CHECK_AWAKE
     
-    # ----------------------------------------------------------------------
-    # Events
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                   Events                                    #
+    ###############################################################################
     
     @ Event indicating power state change successful
     event POWER_STATE_CHANGED(
@@ -101,9 +101,9 @@ module Components {
       attempts: U32 @< Number of ping attempts
     ) severity warning high id 3 format "Jetson not responding after {} ping attempts"
     
-    # ----------------------------------------------------------------------
-    # Telemetry
-    # ----------------------------------------------------------------------
+    ###############################################################################
+    #                                 Telemetry                                   #
+    ###############################################################################
     
     @ Current power state of Jetson
     telemetry CurrentPowerState: components.PowerLevel

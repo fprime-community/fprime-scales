@@ -1,6 +1,6 @@
-module components {
-    @ monitors system error states, processes error information, and communicates with the system management infrastructure to support error handling
-    active component FPManager {
+module Components {
+    @ controls spacecraft operational state transitions and resource allocation based on system monitoring data
+    active component SpacecraftStateManager {
 
         # One async command/port is required for active components
         # This should be overridden by the developers with a useful command/port
