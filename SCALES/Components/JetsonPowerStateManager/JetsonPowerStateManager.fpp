@@ -32,6 +32,9 @@ module components {
     
     @ Port for sending current power state information
     output port powerStateSend: components.PowerState
+
+    @ Port that receives the rate group "tick" for ping intervals
+    async input port schedIn: Svc.Sched
     
     ###############################################################################
     # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
@@ -100,6 +103,16 @@ module components {
     event JETSON_NOT_RESPONDING(
       attempts: U32 @< Number of ping attempts
     ) severity warning high id 3 format "Jetson not responding after {} ping attempts"
+
+    @ Event indicating successful write to power state file
+    event POWER_STATE_FILE_WRITE_SUCCESS(
+      path: string size 128 @< Path to the file written
+    ) severity activity high id 4 format "Successfully wrote power state to file: {}"
+
+    @ Event indicating failed write to power state file
+    event POWER_STATE_FILE_WRITE_FAILED(
+      path: string size 128 @< Path to the file that failed to write
+    ) severity warning high id 5 format "Failed to write power state to file: {}"
     
     ###############################################################################
     #                                 Telemetry                                   #

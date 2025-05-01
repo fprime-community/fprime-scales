@@ -38,21 +38,21 @@ module components {
     timestamp: U32 @< Timestamp of status update
   }
 
-  @ Component to manage and monitor power and thermal conditions of the spacecraft
+  @ Component to manage and monitor power and thermal conditions of the system
   active component PowerThermalManager {
     
     ###############################################################################
     #                                 General Ports                               #
     ###############################################################################
     
-    @ Array of ports for receiving power data from multiple sensors
-    async input port powerData: [5] components.PowerReading
+    @ Port for receiving power data
+    async input port powerData: components.PowerReading
     
-    @ Array of ports for receiving thermal data from multiple sensors
-    async input port thermalData: [8] components.ThermalReading
+    @ Port for receiving thermal data
+    async input port thermalData: components.ThermalReading
     
-    @ Input port for receiving spacecraft state information
-    async input port spacecraftStateIn: components.SystemStateData
+    @ Input port for receiving system state information
+    async input port systemStateIn: components.SystemStateData
     
     @ Output port for all power and thermal telemetry data
     output port dataOut: components.PowerThermalStatus
@@ -109,16 +109,6 @@ module components {
       criticalWatts: F32 @< Critical power threshold in watts
     )
     
-    @ Command to enable/disable automatic recommendations to system resources
-    async command ENABLE_AUTO_RECOMMEND(
-      enable: bool @< Whether to enable automatic recommendations
-    )
-
-    @ Command to enable/disable autonomous correction of thermal and power imbalances
-    async command ENABLE_AUTO_CORRECTION(
-      enable: bool @< Whether to enable autonomous correction
-    )
-    
     ###############################################################################
     #                                   Events                                    #
     ###############################################################################
@@ -153,13 +143,6 @@ module components {
       threshold: F32 @< Critical threshold
     ) severity warning high id 3 format "CRITICAL POWER: Source {} at {W} (threshold: {W})"
     
-    @ Event indicating system state recommendation
-    event STATE_RECOMMENDATION(
-      currentState: components.SystemState @< Current system state
-      recommendedState: components.SystemState @< Recommended system state
-      reason: string size 64 @< Reason for recommendation
-    ) severity activity high id 4 format "Recommending state change from {} to {}: {}"
-    
     @ Event indicating limits updated
     event LIMITS_UPDATED(
       type: string size 16 @< Type of limit updated (THERMAL or POWER)
@@ -167,17 +150,29 @@ module components {
       critical: F32 @< New critical threshold
     ) severity activity high id 5 format "{} limits updated: Warning {} Critical {}"
 
-    @ Event indicating autonomous correction has been enabled/disabled
-    event AUTO_CORRECTION_CHANGED(
-      enabled: bool @< Whether autonomous correction is enabled
-    ) severity activity high id 6 format "Autonomous correction {}enabled"
+    @ Event indicating power is out of range
+    event POWER_OUT_OF_RANGE(
+      sourceId: U8 @< ID of the power source
+      power: F32 @< Current power consumption
+      lowerLimit: F32 @< Lower limit
+      upperLimit: F32 @< Upper limit
+    ) severity warning high id 8 format "Power out of range: Source {} at {W} (limits: {W}-{W})"
     
-    @ Event indicating an autonomous correction was performed
-    event AUTO_CORRECTION_PERFORMED(
-      issueType: string size 16 @< Type of issue corrected (THERMAL or POWER)
-      action: string size 64 @< Description of corrective action taken
-      severity: string size 8 @< Severity of the issue (LOW, MEDIUM, HIGH)
-    ) severity activity high id 7 format "{} issue ({}) corrected: {}"
+    @ Event indicating thermal is out of range
+    event THERMAL_OUT_OF_RANGE(
+      sensorId: U8 @< ID of the thermal sensor
+      temperature: F32 @< Current temperature
+      lowerLimit: F32 @< Lower limit
+      upperLimit: F32 @< Upper limit
+      location: string size 32 @< Sensor location
+    ) severity warning high id 9 format "Thermal out of range: {} at {} is {°C} (limits: {°C}-{°C})"
+    
+    @ Event indicating power transition due to state change
+    event POWER_TRANSITION(
+      previousState: components.SystemState @< Previous system state
+      newState: components.SystemState @< New system state
+      powerChange: F32 @< Change in power consumption
+    ) severity activity high id 10 format "Power transition from {} to {}: {W} change"
     
     ###############################################################################
     #                                 Telemetry                                   #
@@ -209,17 +204,5 @@ module components {
     
     @ Current system state
     telemetry CurrentSystemState: components.SystemState
-    
-    @ Auto-recommendation status
-    telemetry AutoRecommendEnabled: bool
-
-    @ Auto-correction status
-    telemetry AutoCorrectionEnabled: bool
-    
-    @ Count of autonomous corrections performed
-    telemetry AutoCorrectionCount: U32
-    
-    @ Time of last auto-correction (seconds since epoch)
-    telemetry LastAutoCorrectionTime: U32
   }
 }
